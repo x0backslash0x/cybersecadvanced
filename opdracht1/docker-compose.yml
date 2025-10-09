@@ -15,6 +15,20 @@ services:
     ports:
      - 3000:3000
 
+  opa:
+    image: openpolicyagent/opa:latest
+    networks:
+      - default
+    ports:
+      - 8181:8181
+    command:
+      - "run"
+      - "--server"
+      - "--log-level"
+      - "debug"
+      - "--addr"
+      - ":8181"
+
   api:
     image: websec-api
     build:
