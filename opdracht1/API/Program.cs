@@ -52,7 +52,8 @@ app.UseCors(options => options
 
 app.UseAuthentication();
 // app.UseAuthorization(); // authorization gebeurt voortaan dmv OPA
-app.UseMiddleware<OpaAuthorizationMiddleware>(opa, "authz/exampleapp/routes/allow");
+// app.UseMiddleware<OpaAuthorizationMiddleware>(opa, "authz/exampleapp/routes/allow");
+app.UseMiddleware<OpaAuthorizationMiddleware>(opa, "testap/hallo");
 
 app.MapControllers();
 

@@ -17,6 +17,8 @@ services:
 
   opa:
     image: openpolicyagent/opa:latest
+    volumes:
+      - ./OPA/opa.rego:/opa.rego
     networks:
       - default
     ports:
@@ -30,6 +32,7 @@ services:
       - "--log-format=json-pretty"  # dit zal de logs iets leesbaarder maken
       - "--addr"
       - ":8181"
+      - "/opa.rego"
 
   api:
     image: websec-api
