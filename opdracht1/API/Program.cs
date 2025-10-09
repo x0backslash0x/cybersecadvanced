@@ -1,6 +1,11 @@
 using API.Authorization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using OpenPolicyAgent.Opa;
+using OpenPolicyAgent.Opa.AspNetCore;
+
+string opaUrl = System.Environment.GetEnvironmentVariable("OPA_URL") ?? "http://opa:8181"; // niet localhost, omdat met aparte containers wordt gewerkt
+OpaClient opa = new OpaClient(opaUrl);
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,15 +30,16 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.AddHttpContextAccessor();
 
-builder.Services.AddAuthorization(options =>
-{
-    options.FallbackPolicy = new AuthorizationPolicyBuilder()
-        .RequireAuthenticatedUser()
-        .Build();
-    options.AddPolicy("Over16Only", policy =>
-            policy.Requirements.Add(new AgeRequirement(16)));
-});
-builder.Services.AddSingleton<IAuthorizationHandler, AgeHandler>();
+// de controle op leeftijd gebeurt voortaan dmv OPA
+// builder.Services.AddAuthorization(options =>
+// {
+//     options.FallbackPolicy = new AuthorizationPolicyBuilder()
+//         .RequireAuthenticatedUser()
+//         .Build();
+//     options.AddPolicy("Over16Only", policy =>
+//             policy.Requirements.Add(new AgeRequirement(16)));
+// });
+// builder.Services.AddSingleton<IAuthorizationHandler, AgeHandler>();
 
 
 var app = builder.Build();
@@ -45,7 +51,8 @@ app.UseCors(options => options
     .AllowAnyHeader());
 
 app.UseAuthentication();
-app.UseAuthorization();
+// app.UseAuthorization(); // authorization gebeurt voortaan dmv OPA
+app.UseMiddleware<OpaAuthorizationMiddleware>(opa, "authz/exampleapp/routes/allow");
 
 app.MapControllers();
 

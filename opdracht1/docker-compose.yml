@@ -26,6 +26,8 @@ services:
       - "--server"
       - "--log-level"
       - "debug"
+      - "--set=decision_logs.console=true"  # dit zal de logs iets leesbaarder maken
+      - "--log-format=json-pretty"  # dit zal de logs iets leesbaarder maken
       - "--addr"
       - ":8181"
 

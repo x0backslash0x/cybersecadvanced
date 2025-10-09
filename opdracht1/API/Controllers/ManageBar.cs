@@ -5,7 +5,7 @@ namespace API.Controllers
 {
     [Produces("application/json")]
     [Route("api/managebar")]
-    [Authorize(Roles = "bartender")]
+    // [Authorize(Roles = "bartender")] // authorization gebeurt voortaan dmv OPA
     public class ManageBarController : Controller
     {
         [HttpPost]

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿// dit bestand wordt voortaan niet meer gebruikt omdat OPA de authorization over neemt
+using Microsoft.AspNetCore.Authorization;
 
 namespace API.Authorization
 {

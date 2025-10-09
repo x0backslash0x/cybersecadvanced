@@ -5,8 +5,8 @@ namespace API.Controllers
 {
     [Produces("application/json")]
     [Route("api/bar")]
-    [Authorize(Roles = "customer")]
-    [Authorize(Policy = "Over16Only")]
+    // [Authorize(Roles = "customer")] // authorization gebeurt voortaan dmv OPA
+    // [Authorize(Policy = "Over16Only")] // authorization gebeurt voortaan dmv OPA
     public class BarController : Controller
     {
 
