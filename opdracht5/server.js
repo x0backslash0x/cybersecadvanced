@@ -8,6 +8,11 @@ app.get("/", (req, res) => {
     res.status(200).sendFile(indexfile)
 });
 
+// info endpoint
+app.get('/info', (req, res) => {
+    res.json({ "message": "Dit is testdata van de backend" });
+});
+
 // Start server op poort 3000
 const port = 3000;
 app.listen(port, () => console.log(`Server draait op http://localhost:${port}`));

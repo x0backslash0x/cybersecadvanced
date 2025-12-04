@@ -8,5 +8,19 @@
     <body>
         <h1>Vault demo</h1>
         <button id="getInfo">Get information</button>
+        <pre id="infoResult"></pre>
+        <script>
+            // Get information knop
+            document.getElementById('getInfo').addEventListener('click', async () => {
+
+            try {
+                const r = await fetch('/info');
+                const j = await r.json();
+                document.getElementById('infoResult').textContent = JSON.stringify(j, null, 2);
+            } catch (e) {
+                document.getElementById('infoResult').textContent = 'Fout: ' + e.message;
+            }
+            });
+        </script>
     </body>
 </html>
