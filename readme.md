@@ -74,3 +74,12 @@ docker-compose -f docker-compose.yml up
 ```
 
 De SPA zal bereikbaar zijn via localhost:3000
+
+# Opdracht5
+
+# Thread model
+<img src="info/op5_threat-model.drawio.png" />
+
+## Gebruik
+* node.js omgeving installeren (`npm install`)
+* server starten (`node server.js`)
