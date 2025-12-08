@@ -78,7 +78,11 @@ De SPA zal bereikbaar zijn via localhost:3000
 # Opdracht5
 
 # Thread model
-<img src="info/op5_threat-model_v1.drawio.png" />
+<img src="info/op5_threat-model_v1.drawio.png" /><br/>
+
+<img src="info/op5_threat-model_v2.drawio.png" />
+
+Secret staat nu niet meer hardcoded in de code maar wordt opgeslagen in een extern bestand
 
 ## Gebruik
 * node.js omgeving installeren (`npm install`)
