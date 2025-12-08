@@ -78,7 +78,7 @@ De SPA zal bereikbaar zijn via localhost:3000
 # Opdracht5
 
 # Thread model
-<img src="info/op5_threat-model.drawio.png" />
+<img src="info/op5_threat-model_v1.drawio.png" />
 
 ## Gebruik
 * node.js omgeving installeren (`npm install`)
