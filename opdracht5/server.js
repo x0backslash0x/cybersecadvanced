@@ -21,21 +21,23 @@ app.get('/info', async (req, res) => {
 
 // status endpoint
 app.get('/status', async (req, res) => {
-    const vault_endpoint = 'http://127.0.0.1:8200/v1/sys/seal-status';
-    console.log('fetching from ' + vault_endpoint)
-    const vault_response = await fetch(vault_endpoint);
+    const vault_addr = process.env.VAULT_ADDR;
+    const vault_endpoint = 'v1/sys/seal-status';
+    console.log('fetching from ' + vault_addr + '/' + vault_endpoint)
+    const vault_response = await fetch(vault_addr + '/' + vault_endpoint);
     const data = await vault_response.json();
     res.send(data);
 });
 
 // vault endpoint
 app.get('/vault', async (req, res) => {
-    const vault_root_token = 'root';
+    const vault_root_token = process.env.VAULT_ROOT_TOKEN;
     const vault_token = 'my-secret';
     const vault_key = 'openweathermap';
-    const vault_endpoint = 'http://127.0.0.1:8200/v1/kv/';
-    console.log('fetching from ' + vault_endpoint)
-    const vault_response = await fetch(vault_endpoint + vault_token,{
+    const vault_addr = process.env.VAULT_ADDR;
+    const vault_endpoint = 'v1/kv/';
+    console.log('fetching from ' + vault_addr + '/'  + vault_endpoint)
+    const vault_response = await fetch(vault_addr + '/' + vault_endpoint + vault_token,{
         method: 'GET',
         headers: {'X-VAULT-TOKEN':vault_root_token}
     });
