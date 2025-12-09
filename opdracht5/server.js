@@ -28,6 +28,22 @@ app.get('/status', async (req, res) => {
     res.send(data);
 });
 
+// vault endpoint
+app.get('/vault', async (req, res) => {
+    const vault_root_token = 'root';
+    const vault_token = 'my-secret';
+    const vault_key = 'openweathermap';
+    const vault_endpoint = 'http://127.0.0.1:8200/v1/kv/';
+    console.log('fetching from ' + vault_endpoint)
+    const vault_response = await fetch(vault_endpoint + vault_token,{
+        method: 'GET',
+        headers: {'X-VAULT-TOKEN':vault_root_token}
+    });
+    const raw = await vault_response.json();
+    const data = raw.data;
+    res.send(data);
+});
+
 // Start server op poort 3000
 const port = 3000;
 app.listen(port, () => console.log(`Server draait op http://localhost:${port}`));

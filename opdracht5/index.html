@@ -11,6 +11,8 @@
         <pre id="infoResult"></pre>
         <button id="getStatus">Get vault status</button>
         <pre id="statusResult"></pre>
+        <button id="getSecret">Get secret</button>
+        <pre id="secretResult"></pre>
         <script>
             // Get information knop
             document.getElementById('getInfo').addEventListener('click', async () => {
@@ -31,6 +33,17 @@
                 document.getElementById('statusResult').textContent = JSON.stringify(j, null, 2);
             } catch (e) {
                 document.getElementById('statusResult').textContent = 'Fout: ' + e.message;
+            }
+            });
+
+            // Get secret knop
+            document.getElementById('getSecret').addEventListener('click', async () => {
+            try {
+                const r = await fetch('/vault');
+                const j = await r.json();
+                document.getElementById('secretResult').textContent = JSON.stringify(j, null, 2);
+            } catch (e) {
+                document.getElementById('secretResult').textContent = 'Fout: ' + e.message;
             }
             });
         </script>
