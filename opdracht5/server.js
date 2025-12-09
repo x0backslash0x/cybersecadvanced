@@ -19,6 +19,15 @@ app.get('/info', async (req, res) => {
     res.send(data);
 });
 
+// status endpoint
+app.get('/status', async (req, res) => {
+    const vault_endpoint = 'http://127.0.0.1:8200/v1/sys/seal-status';
+    console.log('fetching from ' + vault_endpoint)
+    const vault_response = await fetch(vault_endpoint);
+    const data = await vault_response.json();
+    res.send(data);
+});
+
 // Start server op poort 3000
 const port = 3000;
 app.listen(port, () => console.log(`Server draait op http://localhost:${port}`));

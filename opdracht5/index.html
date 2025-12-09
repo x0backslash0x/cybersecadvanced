@@ -9,16 +9,28 @@
         <h1>Vault demo</h1>
         <button id="getInfo">Get information</button>
         <pre id="infoResult"></pre>
+        <button id="getStatus">Get vault status</button>
+        <pre id="statusResult"></pre>
         <script>
             // Get information knop
             document.getElementById('getInfo').addEventListener('click', async () => {
-
             try {
                 const r = await fetch('/info');
                 const j = await r.json();
                 document.getElementById('infoResult').textContent = JSON.stringify(j, null, 2);
             } catch (e) {
                 document.getElementById('infoResult').textContent = 'Fout: ' + e.message;
+            }
+            });
+
+            // Get status knop
+            document.getElementById('getStatus').addEventListener('click', async () => {
+            try {
+                const r = await fetch('/status');
+                const j = await r.json();
+                document.getElementById('statusResult').textContent = JSON.stringify(j, null, 2);
+            } catch (e) {
+                document.getElementById('statusResult').textContent = 'Fout: ' + e.message;
             }
             });
         </script>
