@@ -32,8 +32,8 @@ app.get('/status', async (req, res) => {
 // vault endpoint
 app.get('/vault', async (req, res) => {
     const vault_root_token = process.env.VAULT_ROOT_TOKEN;
-    const vault_token = 'my-secret';
-    const vault_key = 'openweathermap';
+    const vault_token = 'openweathermap';
+    const vault_key = 'secret';
     const vault_addr = process.env.VAULT_ADDR;
     const vault_endpoint = 'v1/kv/';
     console.log('fetching from ' + vault_addr + '/'  + vault_endpoint)
