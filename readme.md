@@ -76,6 +76,7 @@ docker-compose -f docker-compose.yml up
 De SPA zal bereikbaar zijn via localhost:3000
 
 # Opdracht5
+<img src="info/>
 
 # Thread model
 <img src="info/op5_threat-model_v1.drawio.png" /><br/>

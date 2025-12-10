@@ -40,8 +40,8 @@
             document.getElementById('getSecret').addEventListener('click', async () => {
             try {
                 const r = await fetch('/vault');
-                const j = await r.json();
-                document.getElementById('secretResult').textContent = JSON.stringify(j, null, 2);
+                const j = await r.text();
+                document.getElementById('secretResult').textContent = j;
             } catch (e) {
                 document.getElementById('secretResult').textContent = 'Fout: ' + e.message;
             }
