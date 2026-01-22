@@ -2,6 +2,10 @@ Repository voor OLOD Cyber Security Advanced
 Electronica/ICT - IT & Cybersecurity en Cloud 2025 - 2026
 Patrick Lanove
 
+Hier worden de opdrachten toegelicht die we voor dit vak moeten maken
+* [opdracht 1](#opdracht-1)
+* [opdracht 5](#opdracht-5)
+
 # Opdracht 1
 ## Threat model
 <img src="info/threat-model-draft2.drawio.png" alt="threat model">
@@ -93,23 +97,37 @@ Het artikel van RCEsecurity beschrijft de kwetsbaarheid heel duidelijk
 - [RCE security | What the NULL?! Pre-Auth Wing FTP Server RCE (CVE-2025-47812)](https://www.rcesecurity.com/2025/06/what-the-null-wing-ftp-server-rce-cve-2025-47812/)
 
 
-# Opdracht5
+# Opdracht 5
 <img src="info/op5_vault-demo.png" />
 
-# Thread model
+**gebruikte software**
+* node.js
+* express.js
+* Hashicorp vault
+
+## Thread model
+**Situatie 1: webserver + externe API**<br/>
+De api key (*secret*) wordt bijgehouden als omgevingsvariabele.<br/>
 <img src="info/op5_threat-model_v1.drawio.png" /><br/>
 
+**Situatie 2: webserver + externe API**<br/>
+De api key (*secret*) wordt bijgehouden in een extern bestand.<br/>
 <img src="info/op5_threat-model_v2.drawio.png" />
+
+**Situatie 3: webserver + vault + externe API**<br/>
+De api key (*secret*) wordt bijgehouden in een extern secrets management system (*hashicorp vault*).<br/>
+De vault root token (*bootstrap secret*) wordt bijgehouden als omgevingsvariabele.<br/>
+<img src="info/op5_threat-model_v3.drawio.png" />
 
 
 ## Gebruik
 * node.js omgeving installeren (`npm install`)
 * vault opstarten (`vault server -dev -dev-root-token-id root`)
-* nieuwe secrets engine aanmaken (`vault secrets enable --version=1 kv`)
-* API key oplaan in vault (`vault kv put kv/openweathermap secret=`)
 * omgevings variabelen instellen voor communicatie met vault
 ```bash
 export VAULT_ADDR=http://127.0.0.1:8200
 export VAULT_ROOT_TOKEN=root
 ```
-* server starten (`node server.js`)
+* nieuwe secrets engine aanmaken (`vault secrets enable --version=1 kv`)
+* API key oplaan in vault (`vault kv put kv/openweathermap secret=`)
+* webserver starten (`node server.js`)

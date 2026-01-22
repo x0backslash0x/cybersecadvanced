@@ -3,8 +3,11 @@ const app = express();
 const path = require('path');
 const fs = require('fs');
 
+// SETUP //
 const vault_addr = process.env.VAULT_ADDR;
-const vault_root_token = process.env.VAULT_ROOT_TOKEN;
+const vault_root_token = process.env.VAULT_ROOT_TOKEN;  // bootstrap secret
+const vault_token = 'openweathermap';  // vault endpoint for secret
+let api_key = undefined;  // secret
 
 async function vaultGetSecretKV1(vault_root_token, vault_token) {
     const url = vault_addr + '/'  + 'v1/kv/' + vault_token;
@@ -18,10 +21,6 @@ async function vaultGetSecretKV1(vault_root_token, vault_token) {
     return raw.data.secret;
 }
 
-// secret = path.join(__dirname, 'secret')
-// const api_key = fs.readFileSync(secret, 'utf-8');
-const token = 'openweathermap';
-
 // Hierdoor kan de server je front-end bestand tonen (index.html)
 indexfile = path.join(__dirname, 'index.html')
 app.get("/", (req, res) => {
@@ -30,7 +29,7 @@ app.get("/", (req, res) => {
 
 // info endpoint
 app.get('/info', async (req, res) => {
-    const api_key = await vaultGetSecretKV1(vault_root_token, token);
+    api_key = await vaultGetSecretKV1(vault_root_token, vault_token);
     const url = `https://api.openweathermap.org/data/2.5/weather?q=Brussels&appid=${api_key}`;
     console.log("fetching external api data from" + url)
     const api_response = await fetch(url);
@@ -49,7 +48,7 @@ app.get('/status', async (req, res) => {
 
 // vault endpoint
 app.get('/vault', async (req, res) => {
-    const secret = await vaultGetSecretKV1(vault_root_token, token);
+    const secret = await vaultGetSecretKV1(vault_root_token, vault_token);
     res.send(secret);
 });
 
