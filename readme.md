@@ -4,6 +4,7 @@ Patrick Lanove
 
 Hier worden de opdrachten toegelicht die we voor dit vak moeten maken
 * [opdracht 1](#opdracht-1)
+* [opdracht 3](#opdracht-3)
 * [opdracht 5](#opdracht-5)
 
 # Opdracht 1
