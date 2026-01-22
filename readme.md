@@ -11,6 +11,12 @@ Patrick Lanove
 ## Overzicht schema
 <img src="info/CybersecAdvanced_opdracht1-schema-uit-les.jpg" alt="schema uit de les">
 
+## Gebruikte software
+* startcode bij opdracht (websec-OPA-jumpstart)
+* dotnet 8.0.414 sdk
+* OpenPolicyAgent.Opa.AspNetCore (dotnet package)
+* docker
+
 ## Gebruik
 **instellingen voor de SPA**
 SPA/settings.js
