@@ -4,6 +4,7 @@ Patrick Lanove
 
 Hier worden de opdrachten toegelicht die we voor dit vak moeten maken
 * [opdracht 1](#opdracht-1)
+* [opdracht 2](#opdracht-2)
 * [opdracht 3](#opdracht-3)
 * [opdracht 5](#opdracht-5)
 
@@ -86,6 +87,15 @@ docker-compose -f docker-compose.yml up
 
 De SPA zal bereikbaar zijn via localhost:3000
 
+
+# Opdracht 2
+Magic Wormhole (python package)
+
+**gebruikte software**
+* python
+* python-pip
+* magic-wormhole (python package)
+* magic-wormhole-transit-relay (python package)
 
 # Opdracht 3
 Analyse van CVE-2025-47812, een RCE kwetsbaarheid in WingFTP 7.4.3 en eerdere versies
