@@ -81,6 +81,18 @@ docker-compose -f docker-compose.yml up
 
 De SPA zal bereikbaar zijn via localhost:3000
 
+
+# Opdracht 3
+Analyse van CVE-2025-47812, een RCE kwetsbaarheid in WingFTP 7.4.3 en eerdere versies
+
+De kwetsbaarheid bevindt zich hoofdzakelijk in de bestanden loginok.html en SessionModule.lua.
+Het artikel van RCEsecurity beschrijft de kwetsbaarheid heel duidelijk
+
+## Bronnen
+- [National Vulnerability Database | CVE-2025-47812](https://nvd.nist.gov/vuln/detail/CVE-2025-47812)
+- [RCE security | What the NULL?! Pre-Auth Wing FTP Server RCE (CVE-2025-47812)](https://www.rcesecurity.com/2025/06/what-the-null-wing-ftp-server-rce-cve-2025-47812/)
+
+
 # Opdracht5
 <img src="info/op5_vault-demo.png" />
 

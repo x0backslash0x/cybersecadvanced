@@ -1,0 +1,179 @@
+<!-- webclient/loginok.html
+	 session cookie gets created conditionally on lines 41 & 50 by calling SessionModule.new(). This implicitly also saves the cookie.
+	 session cookie gets saved on lines 64 & 161 by calling SessionModule.save()
+ -->
+<%
+if _SESSION["username"] == nil then
+%>
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0">
+<meta http-equiv="pragma" content="no-cache" />
+<meta http-equiv="cache-control" content="no-cache, must-revalidate" />
+<link href="css/style.css" rel="stylesheet" type="text/css" />
+<script language="javascript" src="include/common.js"></script>
+<body>
+<%
+include("language.html")
+
+local username = _GET["username"] or _POST["username"] or ""
+local password = _GET["password"] or _POST["password"] or ""
+local remember = _GET["remember"] or _POST["remember"] or ""
+local redir = _GET["redir"] or _POST["redir"] or ""
+local lang = _GET["lang"] or _POST["lang"] or ""
+
+username = string.gsub(username,"+"," ")
+username = string.gsub(username,"\t","+")
+password = string.gsub(password,"+"," ")
+password = string.gsub(password,"\t","+")
+
+
+local result = c_CheckUser(username,password)
+if result ~= OK_CHECK_CONNECTION then
+	c_AddWebLog("User '"..string.sub(username, 1, 64).."' login failed! (IP:".._REMOTE_IP..")","0",DOMAIN_LOG_WEB_RESPOND)
+	print("<script>alert('"..LOGINERROR_STR[tonumber(result)].."');location='login.html';</script>")
+else
+	if _COOKIE["UID"] ~= nil then
+		_SESSION_ID = _COOKIE["UID"]
+		local retval = SessionModule.load(_SESSION_ID)
+		if retval == false then
+			_SESSION_ID = SessionModule.new()
+			if _UseSSL == true then
+				_SETCOOKIE = _SETCOOKIE.."Set-Cookie: UID=".._SESSION_ID.."; HttpOnly; Secure\r\n"
+			else
+				_SETCOOKIE = _SETCOOKIE.."Set-Cookie: UID=".._SESSION_ID.."; HttpOnly\r\n"
+			end
+			rawset(_COOKIE,"UID",_SESSION_ID)
+		end
+	else
+		_SESSION_ID = SessionModule.new()
+		if _UseSSL == true then
+			_SETCOOKIE = _SETCOOKIE.."Set-Cookie: UID=".._SESSION_ID.."; HttpOnly; Secure\r\n"
+		else
+			_SETCOOKIE = _SETCOOKIE.."Set-Cookie: UID=".._SESSION_ID.."; HttpOnly\r\n"
+		end
+		rawset(_COOKIE,"UID",_SESSION_ID)
+	end
+
+	if package.config:sub(1,1) == "\\" then
+		username = string.lower(username)
+	end
+	rawset(_SESSION,"username",username)
+	rawset(_SESSION,"ipaddress",_REMOTE_IP)
+	SessionModule.save(_SESSION_ID)
+
+	if remember ~= "" then
+		setcookie("client_login_name",username,2101702507)
+	end
+
+	if lang ~= "" then
+		setcookie("client_lang",lang,2101702507)
+	end
+
+	local isSmartPhone = false
+	local strUserAgent = string.match(strHead,"User%-Agent:%s?(%s[^\r\n]*)")
+	if strUserAgent ~= nil then
+		strUserAgent = string.lower(strUserAgent)
+		if string.find(strUserAgent, "android") or string.find(strUserAgent, "iphone") then
+			isSmartPhone = true
+		end
+	end
+
+	local strWelcomeMessage = specialhtml_encode(c_GetWelcomeMessage())
+%>
+<script language="javascript">
+
+	var welcomeMessage = "<%=strWelcomeMessage%>";
+	welcomeMessage = welcomeMessage.replace(/&lt;BR&gt;/ig,"<br>");
+
+	var nWidth = 420;
+
+	<% if isSmartPhone == true then %>
+		nWidth = 370;
+	<% end %>
+
+	if(welcomeMessage != "")
+	{
+		showMessagebox("<%=LANG['welcome']%>","<table width='100%' height='100%' border='0' cellpadding='0' cellspacing='0' style='padding:10px;'><tr><td height=260 align='left'><div style='height:260px; overflow:auto; clear:none;'><div style='float: left;'><img src='images/info.gif' align='absmiddle'>&nbsp;&nbsp;</div>"+welcomeMessage+"</div></td></tr><tr align='center'><td><button id='btn_submit' type='submit' onclick='login();' tabindex='1' class='button1'><span><em><%=LANG['create_submit']%></em></span></button>&nbsp;&nbsp;&nbsp;<button id='btn_cancel' onclick='logout();' tabindex='2' class='button1'><span><em><%=LANG['create_cancel']%></em></span></button></td></tr></table>", login, nWidth, 320);
+
+		if(isIE)
+		{
+			$("btn_submit").onclick = function(){login();};
+			$("btn_cancel").onclick = function(){logout();};
+		}
+	}
+	else
+	{
+		login();
+	}
+
+	function login()
+	{
+		<% if redir ~= "" then %>
+		gotoUrl("main.html?redir=<%=specialhtml_encode(redir)%>");
+		<% elseif isSmartPhone == false then %>
+		gotoUrl("main.html");
+		<% else %>
+		gotoUrl("main_m.html");
+		<% end %>
+	}
+
+	function logout()
+	{
+		gotoUrl("logout.html");
+	}
+
+	function gotoUrl(url)
+	{
+		var isBrowserIE = navigator.userAgent.indexOf('MSIE')==-1? 0:1;
+		if (isBrowserIE) 
+		{
+			try
+			{
+				var referLink = document.createElement("a");
+				referLink.href = url;
+				document.body.appendChild(referLink);
+				referLink.click();
+			}
+			catch(e)
+			{
+				window.location = url;
+			}
+		} 
+		else
+		{
+			window.location = url;
+		}
+	}
+
+</script>
+<%
+	local enableTwoFactor, twoFactorCode = c_GetSecretCode(username)
+	if enableTwoFactor ~= nil and enableTwoFactor == true then
+		c_AddConnection(username,"/",_REMOTE_IP,_SESSION_ID,"TOTP AUTH")
+		c_AddWebLog("User '"..username.."' passed password authentication, need TOTP authentication. (IP:".._REMOTE_IP..")",_SESSION_ID,DOMAIN_LOG_WEB_RESPOND)
+		if strWelcomeMessage == "" then
+			print("<script>location='login.html';</script>")
+		end
+	else
+		rawset(_SESSION,"currentpath","/")
+		SessionModule.save(_SESSION_ID)
+
+		c_AddConnection(username,"/",_REMOTE_IP,_SESSION_ID,"LOGIN OK")
+		c_AddWebLog("User '"..username.."' logged in ok! (IP:".._REMOTE_IP..")",_SESSION_ID,DOMAIN_LOG_WEB_RESPOND)
+		c_DoWebEvent(WEB_USER_LOGIN_EVENT,_SESSION_ID)
+	end
+
+end
+%>
+</body>
+</html>
+
+<% 
+else
+	print("<meta http-equiv='Content-Type' content='text/html; charset=utf-8'>")
+	print("<meta http-equiv='Developer' content='www.wftpserver.com'>")
+	print("<script>top.location='main.html';</script>")
+end 
+%>
